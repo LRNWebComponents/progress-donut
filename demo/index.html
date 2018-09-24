@@ -20,7 +20,16 @@
       <h3>Basic progress-donut demo</h3>
       <demo-snippet>
         <template>
-          <progress-donut></progress-donut>
+          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture"></progress-donut>
+        </template>
+      </demo-snippet>
+      <h3>Basic progress-donut demo with set width</h3>
+      <demo-snippet>
+        <template>
+            <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="xs"></progress-donut>
+            <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="sm"></progress-donut>
+          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="lg"></progress-donut>
+          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="xl"></progress-donut>
         </template>
       </demo-snippet>
     </div>
