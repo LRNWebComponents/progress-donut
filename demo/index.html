@@ -20,16 +20,58 @@
       <h3>Basic progress-donut demo</h3>
       <demo-snippet>
         <template>
-          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture"></progress-donut>
+          <progress-donut 
+            title="Your Progress"
+            desc="You have completed 10,8,12, and 15 points of work out of 50 points."
+            complete="[10,8,12,15]"  
+            total="50" 
+            image-src="images/profile1.jpg">
+          </progress-donut>
         </template>
       </demo-snippet>
-      <h3>Basic progress-donut demo with set width</h3>
+      <h3>Basic progress-donut demo sizes</h3>
       <demo-snippet>
         <template>
-            <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="xs"></progress-donut>
-            <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="sm"></progress-donut>
-          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="lg"></progress-donut>
-          <progress-donut complete="[10,8,12,15]" total="50" image-src="images/profile.jpg" image-alt="Profile Picture" size="xl"></progress-donut>
+          <progress-donut 
+            title="Your Progress" 
+            desc="You have completed 10,8,12, and 15 points of work out of 50 points."
+            complete="[10,8,12,15]" 
+            total="50"
+            image-src="images/profile1.jpg"
+            size="xs">
+          </progress-donut>
+          <progress-donut 
+            title="Your Progress" 
+            desc="You have completed 75% of the assigned items."
+            complete="[75]" 
+            total="100"
+            image-src="images/profile2.jpg"
+            size="sm">
+          </progress-donut>
+          <progress-donut 
+            title="Pet Unit Progress" 
+            desc="4/5 lessons completed"
+            complete="[4]" 
+            total="5"
+            image-src="images/image1.jpg"
+            size="md">
+          </progress-donut>
+          <progress-donut 
+            title="Your Fruit Intake" 
+            desc="You had 3 and 2 servings of your recommended 6 servings per day."
+            complete="[3,2]" 
+            total="6"
+            image-src="images/image2.jpg"
+            size="lg">
+          </progress-donut>
+          <progress-donut 
+            complete="[6]" 
+            desc="You have visited 6 of 10 landmarks so far."
+            image-src="images/image3.jpg"
+            size="xl"
+            title="Your Travel Plans" 
+            total="10">
+          </progress-donut>
         </template>
       </demo-snippet>
     </div>

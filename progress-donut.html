@@ -58,12 +58,19 @@ A LRN element
       }
     </style>
     <div id="wrapper">
-      <img id="image" src$="[[imageSrc]]" alt$="[[imageAlt]]" style$="[[imageStyle]]">
+      <img id="image" 
+        alt$="[[imageAlt]]" 
+        aria-hidden="true"
+        hidden$="[[!imageSrc]]"  
+        src$="[[imageSrc]]" 
+        style$="[[imageStyle]]">
       <chartist-render id="chart" 
         data$="[[data]]"
-        class="ct-square" 
+        chart-desc$="[[desc]]"
         chart-title="[[title]]" 
-        options$="[[options]]"
+        class="ct-square" 
+        options$="[[options]]" 
+        title$="[[title]]"
         type="pie" >
       </chartist-render>
     </div>
@@ -78,12 +85,6 @@ A LRN element
         'chartist-render-draw': '_onCreated'
       },
       properties: {
-        /**
-          * Title
-          */
-        title: {
-          type: String,
-        },
         /**
           * An array of completed values
           */
@@ -103,6 +104,13 @@ A LRN element
         data: {
           type: Array,
           computed: '_getData(complete)'
+        },
+        /**
+          * Accessible long description
+          */
+        desc: {
+          type: String,
+          value: null
         },
         /**
           * An array of data for the donut chart
@@ -140,6 +148,12 @@ A LRN element
         size: {
           type: String,
           value: 'md'
+        },
+        /**
+          * Title
+          */
+        title: {
+          type: String,
         },
         /**
           * An array of incomplete values
