@@ -19,7 +19,13 @@ A LRN element
 <dom-module id="progress-donut">
   <template>
     <style is="custom-style">
+      :host {
+        background-color: var(--simple-colors-background1, #ffffff);
+        overflow: visible;
+        display: block;
+      }
       :host #wrapper {
+        margin: 0 auto;
         position: relative;
       }
       :host #wrapper > * {
@@ -106,6 +112,14 @@ A LRN element
           type: Number,
         },
         /**
+          * An array of hex codes to use as colors for each section. 
+          * If null, colors are determined by accentColor & dark properties
+          */
+        colors: {
+          type: Array,
+          value: null
+        },
+        /**
           * An array of data for the donut chart
           */
         data: {
@@ -124,7 +138,7 @@ A LRN element
           */
         options: {
           type: Array,
-          computed: '_getOptions(complete,total,size)'
+          computed: '_getOptions(complete,total,size,colors,accentColor,dark)'
         },
         /**
           * The source of the image in the center of the object.
@@ -230,16 +244,16 @@ A LRN element
         * Makes chart and returns the chart object. 
         */
        _getImageStyle: function(size){
-         let offset = '21%', diameter = '58%';
+         let offset = '22%', diameter = '56%';
         if(this.size === 'xs'){
-          offset = '29.5%';
-          diameter = '41%';
+          offset = '32%';
+          diameter = '36%';
         } else if(this.size === 'sm'){
-          offset = '24%';
-          diameter = '52%';
+          offset = '26%';
+          diameter = '48%';
         } else if(this.size === 'lg'){
-          offset = '19%';
-          diameter = '62%';
+          offset = '20%';
+          diameter = '60%';
         } else if(this.size === 'xl'){
           offset = '17%';
           diameter = '66%';
@@ -249,7 +263,7 @@ A LRN element
       /**
         * Makes chart and returns the chart object. 
         */
-       _getOptions: function(complete,total,size){
+       _getOptions: function(complete,total,size,colors,accentColor,dark){
         let sum = 0;
         for(let i=0;i<complete.length;i++){
           sum += parseFloat(complete[i]);
@@ -259,19 +273,19 @@ A LRN element
       /**
         * Makes chart and returns the chart object. 
         */
-      makeChart: function(){
-        this.chart = this.$.chart.makeChart();
-      },
-      /**
-        * Makes chart and returns the chart object. 
-        */
       _onCreated: function(e){
-        let colors = [],accent = this.accentColor !== null ? this.accentColor.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }) : null;
-        console.log(Polymer.SimpleColorsUtility.hexCodes,this.accentColor,this.dark,accent);
-        if(this.accentColor !== null) {
-          console.log(Polymer.SimpleColorsUtility.hexCodes[accent]);
+        let colors = this.colors, 
+          chart = e.detail, strokeWidth = '10%', 
+          hex = Polymer.SimpleColorsUtility.hexCodes,
+          accent = this.accentColor !== null ? this.accentColor.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }): null;
+        if(colors === null || colors.length === 0){
+            if(accent !== null && hex[accent] !== null){
+            colors = this.dark ? [ hex[accent][9], hex[accent][6], hex[accent][3], hex[accent][7], hex[accent][4] ] : [ hex[accent][0], hex[accent][3], hex[accent][5], hex[accent][2], hex[accent][4] ]
+          } else {
+            colors = this.dark ? [ hex.orange[6], hex.pink[4], hex.purple[5], hex.cyan[6], hex.lime[5] ] : [ hex.pink[5], hex.deepPurple[4], hex.blue[3], hex.teal[4], hex.yellow[5] ]
+          }
         }
-        let chart = e.detail, strokeWidth = '10%';
+        
         if(this.size === 'xs'){
           strokeWidth = '8%'
         } else if(this.size === 'sm'){
@@ -281,20 +295,13 @@ A LRN element
         } else if(this.size === 'xl'){
           strokeWidth = '12%'
         }
+        // From chartist.js docs: 
         chart.on('draw', function(data) {
           data.element._node.style.strokeWidth = strokeWidth;
-          //data.element._node.style.stroke = '#00ff00';
-          console.log(data);
+          data.element._node.style.stroke = colors[data.index%colors.length];
           if(data.type === 'slice') {
-            // Get the total path length in order to use for dash array animation
             var pathLength = data.element._node.getTotalLength();
-
-            // Set a dasharray that matches the path length as prerequisite to animate dashoffset
-            data.element.attr({
-              'stroke-dasharray': pathLength + 'px ' + pathLength + 'px'
-            });
-
-            // Create animation definition while also assigning an ID to the animation for later sync usage
+            data.element.attr({ 'stroke-dasharray': pathLength + 'px ' + pathLength + 'px' });
             var animationDefinition = {
               'stroke-dashoffset': {
                 id: 'anim' + data.index,
@@ -302,33 +309,22 @@ A LRN element
                 from: -pathLength + 'px',
                 to:  '0px',
                 easing: Chartist.Svg.Easing.easeOutQuint,
-                // We need to use `fill: 'freeze'` otherwise our animation will fall back to initial (not visible)
                 fill: 'freeze'
               }
             };
-
-            // If this was not the first slice, we need to time the animation so that it uses the end sync event of the previous animation
             if(data.index !== 0) {
               animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
             }
-
-            // We need to set an initial value before the animation starts as we are not in guided mode which would do that for us
-            data.element.attr({
-              'stroke-dashoffset': -pathLength + 'px'
-            });
-
-            // We can't use guided mode as the animations need to rely on setting begin manually
-            // See http://gionkunz.github.io/chartist-js/api-documentation.html#chartistsvg-function-animate
+            data.element.attr({ 'stroke-dashoffset': -pathLength + 'px' });
             data.element.animate(animationDefinition, false);
           }
         });
-        /*chart.on('created', function() {
-          if(window.__anim21278907124) {
-            clearTimeout(window.__anim21278907124);
-            window.__anim21278907124 = null;
-          }
-          window.__anim21278907124 = setTimeout(chart.update.bind(chart), 10000);
-        });*/
+      },
+      /**
+        * Makes chart and returns the chart object. 
+        */
+      makeChart: function(){
+        this.chart = this.$.chart.makeChart();
       },
     });
   </script>
