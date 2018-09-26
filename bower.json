@@ -9,7 +9,7 @@
     "materializecss-styles": "LRNWebComponents/materializecss-styles#^1.2.1",
     "schema-behaviors": "LRNWebComponents/schema-behaviors#^1.0.0",
     "simple-colors": "LRNWebComponents/simple-colors#^1.0.5",
-    "chartist-render": "LRNWebComponents/chartist-render#^1.0.0"
+    "chartist-render": "LRNWebComponents/chartist-render#^1.0.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

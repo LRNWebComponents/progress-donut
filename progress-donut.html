@@ -238,7 +238,7 @@ A LRN element
         * Makes chart and returns the chart object. 
         */
        _getData: function(complete){
-        return {"series": complete};
+         return {"series": complete};
       },
       /**
         * Makes chart and returns the chart object. 
@@ -263,7 +263,7 @@ A LRN element
       /**
         * Makes chart and returns the chart object. 
         */
-       _getOptions: function(complete,total,size,colors,accentColor,dark){
+      _getOptions: function(complete,total,size,colors,accentColor,dark){
         let sum = 0;
         for(let i=0;i<complete.length;i++){
           sum += parseFloat(complete[i]);
@@ -271,61 +271,64 @@ A LRN element
         return {"donut": true, "showLabel":false, "startAngle": 0, "total": Math.max(sum,total)};
       },
       /**
-        * Makes chart and returns the chart object. 
+        * Handles chart creation event. 
         */
       _onCreated: function(e){
-        let colors = this.colors, 
-          chart = e.detail, strokeWidth = '10%', 
-          hex = Polymer.SimpleColorsUtility.hexCodes,
-          accent = this.accentColor !== null ? this.accentColor.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }): null;
-        if(colors === null || colors.length === 0){
-            if(accent !== null && hex[accent] !== null){
-            colors = this.dark ? [ hex[accent][9], hex[accent][6], hex[accent][3], hex[accent][7], hex[accent][4] ] : [ hex[accent][0], hex[accent][3], hex[accent][5], hex[accent][2], hex[accent][4] ]
-          } else {
-            colors = this.dark ? [ hex.orange[6], hex.pink[4], hex.purple[5], hex.cyan[6], hex.lime[5] ] : [ hex.pink[5], hex.deepPurple[4], hex.blue[3], hex.teal[4], hex.yellow[5] ]
-          }
-        }
-        
-        if(this.size === 'xs'){
-          strokeWidth = '8%'
-        } else if(this.size === 'sm'){
-          strokeWidth = '9%'
-        } else if(this.size === 'lg'){
-          strokeWidth = '11%'
-        } else if(this.size === 'xl'){
-          strokeWidth = '12%'
-        }
-        // From chartist.js docs: 
-        chart.on('draw', function(data) {
-          data.element._node.style.strokeWidth = strokeWidth;
-          data.element._node.style.stroke = colors[data.index%colors.length];
-          if(data.type === 'slice') {
-            var pathLength = data.element._node.getTotalLength();
-            data.element.attr({ 'stroke-dasharray': pathLength + 'px ' + pathLength + 'px' });
-            var animationDefinition = {
-              'stroke-dashoffset': {
-                id: 'anim' + data.index,
-                dur: 500,
-                from: -pathLength + 'px',
-                to:  '0px',
-                easing: Chartist.Svg.Easing.easeOutQuint,
-                fill: 'freeze'
-              }
-            };
-            if(data.index !== 0) {
-              animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
-            }
-            data.element.attr({ 'stroke-dashoffset': -pathLength + 'px' });
-            data.element.animate(animationDefinition, false);
-          }
-        });
+        this.__chart = e.detail;
+        this.makeChart(this.__chart);
       },
       /**
         * Makes chart and returns the chart object. 
         */
-      makeChart: function(){
-        this.chart = this.$.chart.makeChart();
-      },
+      makeChart: function(chart){
+        if (chart !== undefined) {
+          let colors = this.colors, strokeWidth = '10%', 
+            hex = Polymer.SimpleColorsUtility.hexCodes,
+            accent = this.accentColor !== null ? this.accentColor.replace(/-([a-z])/g, function (g) { return g[1].toUpperCase(); }): null;
+          if(colors === undefined || colors === null || colors.length === 0){
+              if(accent !== null && hex[accent] !== null){
+              colors = this.dark ? [ hex[accent][9], hex[accent][6], hex[accent][3], hex[accent][7], hex[accent][4] ] : [ hex[accent][0], hex[accent][3], hex[accent][5], hex[accent][2], hex[accent][4] ]
+            } else {
+              colors = this.dark ? [ hex.orange[6], hex.pink[4], hex.purple[5], hex.cyan[6], hex.lime[5] ] : [ hex.pink[5], hex.deepPurple[4], hex.blue[3], hex.teal[4], hex.yellow[5] ]
+            }
+          }
+          
+          if(this.size === 'xs'){
+            strokeWidth = '8%'
+          } else if(this.size === 'sm'){
+            strokeWidth = '9%'
+          } else if(this.size === 'lg'){
+            strokeWidth = '11%'
+          } else if(this.size === 'xl'){
+            strokeWidth = '12%'
+          }
+          // From chartist.js docs: 
+          chart.on('draw', function(data) {
+            data.element._node.style.strokeWidth = strokeWidth;
+            data.element._node.style.stroke = colors[data.index%colors.length];
+            if(data.type === 'slice') {
+              var pathLength = data.element._node.getTotalLength();
+              data.element.attr({ 'stroke-dasharray': pathLength + 'px ' + pathLength + 'px' });
+              var animationDefinition = {
+                'stroke-dashoffset': {
+                  id: 'anim' + data.index,
+                  dur: 500,
+                  from: -pathLength + 'px',
+                  to:  '0px',
+                  easing: Chartist.Svg.Easing.easeOutQuint,
+                  fill: 'freeze'
+                }
+              };
+              if(data.index !== 0) {
+                animationDefinition['stroke-dashoffset'].begin = 'anim' + (data.index - 1) + '.end';
+              }
+              data.element.attr({ 'stroke-dashoffset': -pathLength + 'px' });
+              data.element.animate(animationDefinition, false);
+            }
+          });
+          return chart;
+        }
+      }
     });
   </script>
 </dom-module>
