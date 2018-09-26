@@ -1,0 +1,34 @@
+{
+  "name": "progress-donut",
+  "description": "A LRN element",
+  "license": "Apache-2.0",
+  "main": "progress-donut.html",
+  "dependencies": {
+    "polymer": "Polymer/polymer#^1.10.1",
+    "hax-body-behaviors": "LRNWebComponents/hax-body-behaviors#^1.12.4",
+    "materializecss-styles": "LRNWebComponents/materializecss-styles#^1.2.1",
+    "schema-behaviors": "LRNWebComponents/schema-behaviors#^1.0.0",
+    "simple-colors": "LRNWebComponents/simple-colors#^1.0.5",
+    "chartist-render": "LRNWebComponents/chartist-render#^1.0.1"
+  },
+  "devDependencies": {
+    "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
+    "iron-demo-helpers": "PolymerElements/iron-demo-helpers#^1.0.0",
+    "web-component-tester": "^4.0.0",
+    "webcomponentsjs": "webcomponents/webcomponentsjs#^0.7.0"
+  },
+  "resolutions": {
+    "webcomponentsjs": "^0.7.24"
+  },
+  "homepage": "https://github.com/LRNWebComponents/progress-donut",
+  "_release": "ad2cb9584b",
+  "_resolution": {
+    "type": "branch",
+    "branch": "master",
+    "commit": "ad2cb9584ba832cdd3df45aaf16c6b86556ae294"
+  },
+  "_source": "https://github.com/LRNWebComponents/progress-donut.git",
+  "_target": "master",
+  "_originalSource": "LRNWebComponents/progress-donut",
+  "_direct": true
+}
